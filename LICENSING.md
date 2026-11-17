@@ -4,7 +4,7 @@ This repository holds more than one kind of work, so more than one license appli
 
 | What | License |
 | --- | --- |
-| The web app: everything in this repository outside `modal/` (front end, API routes, scripts, migrations) | [FSL-1.1-Apache-2.0](LICENSE.md). Each release becomes Apache-2.0 two years after it is published. |
+| The web app: everything in this repository outside `modal/` (front end, API routes, scripts, migrations) | [FSL-1.1-ALv2](LICENSE.md). Each release becomes Apache-2.0 two years after it is published. |
 | Model, training and data-processing code: `modal/`, plus any future training code and model weights published by tinig labs | [AGPL-3.0-or-later](modal/LICENSE) |
 | Recordings and transcriptions contributed through the site | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/), as contributors agree in the [Terms](https://collect.tiniglabs.digital/terms) |
 | Prompt texts | Their source licenses: Tatoeba (CC BY 2.0 FR, some CC0), Common Voice (CC0), Wiktionary (CC BY-SA). Attribution is on the [Sources](https://collect.tiniglabs.digital/sources) page. |
