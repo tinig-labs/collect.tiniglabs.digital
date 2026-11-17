@@ -1,0 +1,224 @@
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useRecorder } from "@/components/recorder/use-recorder";
+import { Badge, Button, ButtonLink, Kbd } from "@/components/ui";
+import { MIN_RECORDING_MS } from "@/lib/constants";
+import { AudioPlayer } from "@/components/audio-player";
+import type { PromptItem } from "@/app/api/prompts/next/route";
+
+type Kind = "all" | "sentence" | "word";
+const SOURCE_LABEL: Record<string, string> = { tatoeba: "Tatoeba", common_voice: "Common Voice", wiktionary: "Wiktionary" };
+
+export function RecordSession() {
+  const rec = useRecorder();
+  const [kind, setKind] = useState<Kind>("all");
+  const [queue, setQueue] = useState<PromptItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [done, setDone] = useState(0);
+  const [msg, setMsg] = useState<string | null>(null);
+  const fetching = useRef(false);
+  // The prompt a take was recorded for. A take is only ever submitted against that prompt.
+  const takeFor = useRef<number | null>(null);
+  const prompt = queue[0];
+
+  const changeKind = (k: Kind) => {
+    if (k === kind || rec.state === "recording") return;
+    if (rec.state === "recorded") setMsg("Your unsent take was discarded because the prompt changed.");
+    else setMsg(null);
+    rec.reset();
+    takeFor.current = null;
+    setLoading(true);
+    setKind(k);
+  };
+
+  const startTake = useCallback(() => {
+    if (!prompt) return;
+    takeFor.current = prompt.id;
+    setMsg(null);
+    void rec.start();
+  }, [prompt, rec]);
+
+  const load = useCallback(async (k: Kind, replace = false) => {
+    if (fetching.current) return;
+    fetching.current = true;
+    try {
+      const res = await fetch(`/api/prompts/next${k === "all" ? "" : `?kind=${k}`}`);
+      if (!res.ok) throw new Error();
+      const { items } = (await res.json()) as { items: PromptItem[] };
+      setQueue((q) => {
+        if (replace) return items;
+        const seen = new Set(q.map((p) => p.id));
+        return [...q, ...items.filter((p) => !seen.has(p.id))];
+      });
+    } catch {
+      setMsg("Could not load prompts. Check your connection.");
+    } finally {
+      fetching.current = false;
+      setLoading(false);
+    }
+  }, []);
+
+  // Fetching from our API is a legitimate effect; state is only set after the request resolves.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { void load(kind, true); }, [kind, load]);
+  // Prefetch the next batch before the queue runs out.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { if (!loading && queue.length > 0 && queue.length <= 3) void load(kind); }, [queue.length, loading, kind, load]);
+
+  const advance = useCallback(() => {
+    rec.reset();
+    takeFor.current = null;
+    setQueue((q) => q.slice(1));
+  }, [rec]);
+
+  const submit = useCallback(async () => {
+    if (!rec.result || !prompt || submitting) return;
+    if (takeFor.current !== prompt.id) {
+      rec.reset();
+      return setMsg("That take belonged to a different prompt and was discarded. Record this one.");
+    }
+    if (rec.result.durationMs < MIN_RECORDING_MS) return setMsg("That clip is too short. Record again.");
+    setSubmitting(true);
+    setMsg(null);
+    try {
+      const sign = await fetch("/api/recordings/upload-url", { method: "POST" });
+      const signed = (await sign.json()) as {
+        id: string; key: string; url: string; headers: Record<string, string>; token: string; fallbackUrl?: string; error?: string;
+      };
+      if (!sign.ok) throw new Error(signed.error);
+      const { id, key, url, headers, token, fallbackUrl } = signed;
+      const blob = rec.result.blob;
+      // Direct-to-R2 first (cheapest); R2 errors carry no CORS headers, so a refusal surfaces as a
+      // network error. Either way, retry through the Worker's R2 binding.
+      const direct = await fetch(url, { method: "PUT", headers, body: blob }).then((r) => r.ok, () => false);
+      if (!direct) {
+        if (!fallbackUrl || fallbackUrl === url) throw new Error("Upload failed. Try again.");
+        const viaWorker = await fetch(fallbackUrl, { method: "PUT", headers: { "content-type": "audio/wav", "x-upload-token": token }, body: blob })
+          .then((r) => r.ok || r.status === 409, () => false);
+        if (!viaWorker) throw new Error("Upload failed. Check your connection and try again.");
+      }
+      const save = await fetch("/api/recordings", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ id, key, token, promptId: prompt.id, durationMs: rec.result.durationMs }),
+      });
+      if (!save.ok && save.status !== 409) throw new Error(((await save.json()) as { error?: string }).error);
+      setDone((n) => n + 1);
+      advance();
+    } catch (e) {
+      setMsg(e instanceof Error && e.message ? e.message : "Upload failed. Try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }, [rec, prompt, submitting, advance]);
+
+  // Keyboard: Space record/stop, Enter submit, S skip, R re-record.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement || e.repeat) return;
+      if (e.code === "Space") {
+        e.preventDefault();
+        if (rec.state === "recording") void rec.stop();
+        else if (rec.state === "idle" || rec.state === "recorded") startTake();
+      } else if (e.key === "Enter" && rec.state === "recorded") {
+        e.preventDefault();
+        void submit();
+      } else if (e.key.toLowerCase() === "s" && rec.state !== "recording") advance();
+      else if (e.key.toLowerCase() === "r" && rec.state === "recorded") rec.reset();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [rec, submit, advance, startTake]);
+
+  const seconds = (rec.elapsed / 1000).toFixed(1);
+
+  return (
+    <div className="mx-auto max-w-3xl space-y-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+        <div className="grid grid-cols-3 gap-1 rounded-full bg-surface p-1 text-sm sm:inline-flex" role="group" aria-label="Prompt type">
+          {(["all", "sentence", "word"] as Kind[]).map((k) => (
+            <button
+              key={k}
+              onClick={() => changeKind(k)}
+              aria-pressed={kind === k}
+              disabled={rec.state === "recording" || submitting}
+              title={rec.state === "recorded" && kind !== k ? "Switching discards your unsent take" : undefined}
+              className={`rounded-full px-4 py-2 font-semibold capitalize transition-colors disabled:opacity-50 sm:py-1.5 ${kind === k ? "bg-card shadow-sm" : "text-text/60 hover:text-text"}`}
+            >
+              {k === "all" ? "Mixed" : `${k}s`}
+            </button>
+          ))}
+        </div>
+        <div className="flex items-center justify-between gap-3 sm:justify-end">
+          <span className="text-sm font-medium text-muted tabular-nums">{done} recorded this session</span>
+          <ButtonLink href="/record/history" variant="secondary" className="h-9 rounded-full px-4">
+            Your recordings
+          </ButtonLink>
+        </div>
+      </div>
+
+      <div className="rounded-[28px] bg-card">
+        <div className="flex min-h-56 flex-col items-center justify-center gap-4 px-5 py-10 text-center sm:px-6 sm:py-12">
+          {loading ? (
+            <span className="text-muted">Loading…</span>
+          ) : prompt ? (
+            <>
+              <p className={`font-medium tracking-tight ${prompt.kind === "word" ? "text-4xl sm:text-5xl" : "text-2xl leading-snug sm:text-3xl"}`}>
+                {prompt.text}
+              </p>
+              <Badge>{SOURCE_LABEL[prompt.source] ?? prompt.source}</Badge>
+            </>
+          ) : (
+            <span className="text-muted">You have recorded every available prompt. Thank you.</span>
+          )}
+        </div>
+
+        {/* On phones the controls stay above the tab bar, in reach of a thumb. */}
+        <div className="sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] z-10 flex flex-col items-center gap-4 rounded-b-[28px] border-t border-border bg-card px-4 py-4 sm:static sm:px-6 sm:py-6">
+          <div className="flex h-6 w-full max-w-xs items-center gap-3">
+            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface" aria-hidden>
+              <div className="h-full bg-accent transition-[width] duration-75" style={{ width: `${rec.level * 100}%` }} />
+            </div>
+            <span className="w-10 text-right text-xs text-muted tabular-nums">{seconds}s</span>
+          </div>
+
+          {rec.state === "recorded" && rec.result && (
+            <div className="w-full max-w-md">
+              <AudioPlayer src={rec.result.url} label="Your take" />
+            </div>
+          )}
+
+          <div className="grid w-full max-w-md grid-cols-2 gap-2 sm:flex sm:w-auto sm:flex-wrap sm:justify-center">
+            {rec.state === "recording" ? (
+              <Button onClick={() => void rec.stop()} variant="danger" className="col-span-2 h-14 text-base sm:h-11 sm:w-36 sm:text-sm">
+                <span className="size-2 animate-pulse rounded-full bg-danger" /> Stop
+              </Button>
+            ) : rec.state === "recorded" ? (
+              <>
+                <Button variant="secondary" onClick={rec.reset} className="h-14 text-base sm:h-11 sm:text-sm">Re-record</Button>
+                <Button onClick={() => void submit()} disabled={submitting} className="h-14 text-base sm:h-11 sm:w-36 sm:text-sm">
+                  {submitting ? "Uploading…" : "Submit"}
+                </Button>
+              </>
+            ) : (
+              <Button onClick={startTake} disabled={!prompt || rec.state !== "idle"} className="col-span-2 h-14 text-base sm:h-11 sm:w-36 sm:text-sm">
+                {rec.state === "starting" || rec.state === "processing" ? "…" : "Record"}
+              </Button>
+            )}
+            <Button variant="ghost" onClick={advance} disabled={!prompt || rec.state === "recording"} className="col-span-2 h-10 sm:h-11">
+              Skip prompt
+            </Button>
+          </div>
+
+          {(rec.error || msg) && <p role="alert" className="text-sm text-danger">{rec.error ?? msg}</p>}
+        </div>
+      </div>
+
+      <p className="hidden text-center text-xs text-muted sm:block">
+        <Kbd>Space</Kbd> record / stop · <Kbd>Enter</Kbd> submit · <Kbd>R</Kbd> re-record · <Kbd>S</Kbd> skip
+      </p>
+    </div>
+  );
+}

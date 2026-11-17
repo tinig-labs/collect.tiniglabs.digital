@@ -1,0 +1,36 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tagalog-speech-corpus",
+  "main": "worker.mjs",
+  // tiniglabs.digital DNS is on Cloudflare (zone active since 2026-11-17).
+  "routes": [{ "pattern": "collect.tiniglabs.digital", "custom_domain": true }],
+  "workers_dev": false,
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+  "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "tagalog-speech-corpus" }],
+  "r2_buckets": [
+    { "binding": "NEXT_INC_CACHE_R2_BUCKET", "bucket_name": "tagalog-speech-corpus-cache" },
+    { "binding": "AUDIO", "bucket_name": "tagalog-speech-audio" }
+  ],
+  // Batch the wav2vec2 phoneme model every 30 minutes instead of per upload.
+  "triggers": { "crons": ["*/30 * * * *"] },
+  "ratelimits": [
+    { "name": "UPLOAD_LIMITER", "namespace_id": "1001", "simple": { "limit": 30, "period": 60 } },
+    // Invite-code guesses: 5 per minute per account, and refused if the limiter is unavailable
+    { "name": "INVITE_LIMITER", "namespace_id": "1002", "simple": { "limit": 5, "period": 60 } }
+  ],
+  "observability": { "enabled": true, "head_sampling_rate": 1 },
+  "vars": {
+    // Public R2 custom domain that serves audio through the CDN
+    "AUDIO_PUBLIC_BASE_URL": "https://audio.tiniglabs.digital",
+    "R2_BUCKET_NAME": "tagalog-speech-audio",
+    // Contact-form alerts via Azure Communication Services (ACS_ACCESS_KEY is a secret)
+    "ACS_ENDPOINT": "https://tiniglabs-cs.asiapacific.communication.azure.com",
+    "ALERT_FROM": "no-reply@tiniglabs.digital",
+    "CONTACT_ALERT_TO": "hello@tiniglabs.digital"
+  }
+  // Secrets (wrangler secret put): DATABASE_URL, NEON_AUTH_BASE_URL, NEON_AUTH_COOKIE_SECRET,
+  // R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, MODAL_ENDPOINT_URL, MODAL_TOKEN, CRON_SECRET, ADMIN_EMAILS, ACS_ACCESS_KEY
+  // The non-R2 ones can be pushed from .dev.vars with: node scripts/push-secrets.mjs
+}
