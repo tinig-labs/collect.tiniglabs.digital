@@ -1,8 +1,30 @@
+import type { Metadata } from "next";
 import { ButtonLink } from "@/components/ui";
-import { CLOSED_BETA } from "@/lib/constants";
+import { CLOSED_BETA, SITE_URL } from "@/lib/constants";
+import { ORGANIZATION, jsonLd, publicPage } from "@/lib/seo";
 import { getStats } from "@/lib/stats";
 
 export const revalidate = 3600;
+
+const description =
+  "Record Tagalog words and sentences for an open speech dataset. Speech professionals verify every IPA transcription.";
+
+export const metadata: Metadata = publicPage({ description, path: "/" });
+
+const DATASET_JSON_LD = {
+  "@type": "Dataset",
+  name: "tinig labs Tagalog Speech Corpus",
+  description:
+    "An open corpus of Tagalog speech recordings. Speech professionals verify the IPA transcription of each clip.",
+  url: `${SITE_URL}/`,
+  inLanguage: "tl",
+  isAccessibleForFree: true,
+  license: "https://creativecommons.org/publicdomain/zero/1.0/",
+  keywords: ["Tagalog", "Filipino", "speech", "IPA", "phonetic transcription", "speech therapy"],
+  creator: ORGANIZATION,
+  publisher: { "@id": ORGANIZATION["@id"] },
+  creativeWorkStatus: "In progress",
+};
 
 async function safeStats() {
   try {
@@ -24,6 +46,7 @@ export default async function Home() {
 
   return (
     <div className="space-y-20 sm:space-y-28">
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(DATASET_JSON_LD)} />
       <section className="max-w-3xl pt-4 sm:pt-10">
         <p className="flex flex-wrap items-center gap-2 text-sm font-medium text-accent">
           Open Tagalog speech corpus

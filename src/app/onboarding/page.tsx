@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { NOINDEX } from "@/lib/constants";
 import { requireUser } from "@/lib/session";
 import { OnboardingForm } from "./onboarding-form";
 
-export const metadata: Metadata = { title: "Before you start" };
+export const metadata: Metadata = { title: "Before you start", robots: NOINDEX };
 
 export default async function Page({ searchParams }: PageProps<"/onboarding">) {
   const user = await requireUser();

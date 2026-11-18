@@ -3,11 +3,11 @@ import { desc, isNull, sql } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { requireUser } from "@/lib/session";
 import { createInvite, markContactHandled, revokeInvite } from "@/lib/actions";
-import { CONTACT_TOPICS } from "@/lib/constants";
+import { CONTACT_TOPICS, NOINDEX } from "@/lib/constants";
 import { formatWhen } from "@/components/history";
 import { Button, ButtonLink, Card, Field, Input, PageHeader, Select } from "@/components/ui";
 
-export const metadata: Metadata = { title: "Admin" };
+export const metadata: Metadata = { title: "Admin", robots: NOINDEX };
 
 const isInactive = (i: typeof schema.inviteCodes.$inferSelect) =>
   i.uses >= i.maxUses || (!!i.expiresAt && i.expiresAt < new Date());

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { NOINDEX } from "@/lib/constants";
 import { canReview, requireUser } from "@/lib/session";
 import { ReviewSession } from "./review-session";
 import { InviteForm } from "./invite-form";
 
-export const metadata: Metadata = { title: "Review" };
+export const metadata: Metadata = { title: "Review", robots: NOINDEX };
 
 export default async function Page() {
   const user = await requireUser();

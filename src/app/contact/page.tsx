@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import { publicPage } from "@/lib/seo";
 import { getCurrentUser } from "@/lib/session";
 import { LEGAL_CONTACT } from "@/components/legal";
 import { ContactForm } from "./contact-form";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = publicPage({
   title: "Contact",
   description: "Questions, beta access, reviewer access, or requests about your data.",
-};
+  path: "/contact",
+});
 
 const NOTES = [
   { title: "Beta access", body: "Tell us a little about yourself and how you speak Tagalog. We send invite codes in small batches." },

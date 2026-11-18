@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { publicPage } from "@/lib/seo";
 import { Brand } from "@/components/brand";
 import { A, LegalPage, List, Mail, P, Section } from "@/components/legal";
 
 export const dynamic = "force-static";
 
 const title = "Terms of Service";
-export const metadata: Metadata = {
+export const metadata: Metadata = publicPage({
   title,
   description: "The terms for recording and reviewing on the tinig labs speech corpus.",
-  alternates: { canonical: "/terms" },
-};
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

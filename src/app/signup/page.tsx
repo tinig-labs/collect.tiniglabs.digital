@@ -3,9 +3,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { AuthShell } from "@/components/auth/auth-shell";
 import { SignupForm } from "@/components/auth/auth-forms";
-import { CLOSED_BETA } from "@/lib/constants";
+import { CLOSED_BETA, NOINDEX } from "@/lib/constants";
 
-export const metadata: Metadata = { title: "Create account" };
+export const metadata: Metadata = { title: "Create account", robots: NOINDEX };
 
 export default function Page() {
   return (

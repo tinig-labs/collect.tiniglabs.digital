@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { NOINDEX } from "@/lib/constants";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { eq, sql } from "drizzle-orm";
@@ -7,7 +8,7 @@ import { canReview, requireUser } from "@/lib/session";
 import { ButtonLink } from "@/components/ui";
 import { DetailsForm, NameForm, PasswordForm, SignOutButton } from "./account-forms";
 
-export const metadata: Metadata = { title: "Account" };
+export const metadata: Metadata = { title: "Account", robots: NOINDEX };
 
 const ROLE = { speaker: "Speaker", reviewer: "Reviewer", admin: "Admin" } as const;
 

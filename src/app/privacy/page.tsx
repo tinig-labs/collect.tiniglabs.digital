@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { publicPage } from "@/lib/seo";
 import { Brand } from "@/components/brand";
 import { A, DataTable, LegalPage, List, Mail, P, Section } from "@/components/legal";
 
 export const dynamic = "force-static";
 
 const title = "Privacy Policy";
-export const metadata: Metadata = {
+export const metadata: Metadata = publicPage({
   title,
   description: "What the tinig labs speech corpus collects when you record or review, and what happens to it.",
-  alternates: { canonical: "/privacy" },
-};
+  path: "/privacy",
+});
 
 // Keep in sync with src/db/schema.ts and src/app/api/admin/export/route.ts
 const DATA = [

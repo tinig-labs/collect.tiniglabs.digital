@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { NOINDEX } from "@/lib/constants";
 import { notFound, redirect } from "next/navigation";
 import { sql } from "drizzle-orm";
 import { db } from "@/db";
@@ -10,7 +11,7 @@ import {
   Empty, HISTORY_PAGE_SIZE, HistoryHeader, HistoryItem, Ipa, Pager, Pill, formatWhen, pageFrom, totalPages,
 } from "@/components/history";
 
-export const metadata: Metadata = { title: "Your reviews" };
+export const metadata: Metadata = { title: "Your reviews", robots: NOINDEX };
 
 type Row = {
   id: number; action: "approve" | "correct" | "bad_audio" | "skip"; ipa: string | null; created_at: string;

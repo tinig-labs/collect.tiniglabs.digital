@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
+import { publicPage } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Sources & licenses" };
+export const metadata: Metadata = publicPage({
+  title: "Sources & licenses",
+  description: "Where the corpus prompts come from, and the licenses for the prompts and the recordings.",
+  path: "/sources",
+});
 export const dynamic = "force-static";
 
 const sources = [
