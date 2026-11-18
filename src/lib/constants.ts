@@ -9,8 +9,14 @@ export const MODAL_BATCH = 32;
 /** Failed model transcriptions are retried on later cron runs before a clip is rejected. */
 export const MODAL_MAX_ATTEMPTS = 3;
 
-// While true: a site-wide "under development" banner, and search engines are asked not to index.
+// While true: a site-wide "under development" banner. Indexing is set per page (see NOINDEX).
 export const UNDER_DEVELOPMENT = true;
+
+export const SITE_URL = "https://collect.tiniglabs.digital";
+export const MAIN_SITE_URL = "https://tiniglabs.digital";
+
+// For sign-in, contributor, and admin pages: nothing there is useful in search results.
+export const NOINDEX = { index: false, follow: false } as const;
 
 // Closed beta: contributing requires an invite code (redeemed at onboarding). Admins are exempt.
 export const CLOSED_BETA = true;

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { publicPage } from "@/lib/seo";
 import type { ReactNode } from "react";
 import { Kbd } from "@/components/ui";
 import { A, List, P, Section } from "@/components/legal";
@@ -6,10 +7,11 @@ import { REVIEWS_TO_FINALIZE } from "@/lib/constants";
 
 export const dynamic = "force-static";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = publicPage({
   title: "Guide",
   description: "How to record clean clips, and the IPA conventions reviewers follow for Tagalog.",
-};
+  path: "/guide",
+});
 
 const TOC = [
   { id: "recording", label: "Recording" },

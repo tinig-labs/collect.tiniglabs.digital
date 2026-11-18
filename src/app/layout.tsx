@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Figtree, Montserrat, Noto_Sans } from "next/font/google";
 import { SiteHeader } from "@/components/site-header";
 import { Brand, Wordmark } from "@/components/brand";
-import { UNDER_DEVELOPMENT } from "@/lib/constants";
+import { MAIN_SITE_URL, SITE_URL, UNDER_DEVELOPMENT } from "@/lib/constants";
 import "./globals.css";
 
 const figtree = Figtree({ variable: "--font-figtree", subsets: ["latin", "latin-ext"], weight: ["400", "500", "600", "700"] });
@@ -12,16 +12,29 @@ const montserrat = Montserrat({ variable: "--font-montserrat", subsets: ["latin"
 // Broad IPA coverage for transcriptions and the keyboard
 const noto = Noto_Sans({ variable: "--font-noto", subsets: ["latin", "latin-ext"], display: "swap" });
 
-export const SITE_URL = "https://collect.tiniglabs.digital";
+const description =
+  "Record Tagalog words and sentences for an open speech dataset. Speech professionals verify every IPA transcription.";
 
+// Defaults only. Public pages set their own canonical; private ones set robots: NOINDEX.
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: "Speech Corpus · tinig labs", template: "%s · tinig labs speech corpus" },
-  description: "An open Tagalog speech corpus with IPA transcriptions verified by speech professionals.",
+  title: { default: "Tagalog Speech Corpus · tinig labs", template: "%s · tinig labs speech corpus" },
+  description,
+  applicationName: "tinig labs speech corpus",
+  authors: [{ name: "tinig labs", url: MAIN_SITE_URL }],
+  publisher: "tinig labs",
+  keywords: [
+    "Tagalog speech dataset",
+    "Filipino speech corpus",
+    "IPA transcription",
+    "open speech data",
+    "speech therapy",
+    "cleft palate speech",
+    "speech recognition",
+  ],
   icons: { icon: "/logo.svg" },
-  alternates: { canonical: "/" },
-  openGraph: { type: "website", siteName: "tinig labs", url: "/" },
-  robots: UNDER_DEVELOPMENT ? { index: false, follow: false } : undefined,
+  openGraph: { type: "website", siteName: "tinig labs", locale: "en_PH", description },
+  twitter: { card: "summary_large_image", description },
 };
 
 // viewport-fit=cover so env(safe-area-inset-*) works under the phone tab bar.
@@ -33,7 +46,7 @@ const FOOTER_LINKS = [
   { label: "Sources & licenses", href: "/sources" },
   { label: "Terms", href: "/terms" },
   { label: "Privacy", href: "/privacy" },
-  { label: "tiniglabs.digital", href: "https://tiniglabs.digital" },
+  { label: "tiniglabs.digital", href: MAIN_SITE_URL },
 ];
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

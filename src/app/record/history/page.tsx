@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { NOINDEX } from "@/lib/constants";
 import { notFound } from "next/navigation";
 import { sql } from "drizzle-orm";
 import { db } from "@/db";
@@ -10,7 +11,7 @@ import {
   Empty, HISTORY_PAGE_SIZE, HistoryHeader, HistoryItem, Ipa, Pager, Pill, formatWhen, pageFrom, totalPages,
 } from "@/components/history";
 
-export const metadata: Metadata = { title: "Your recordings" };
+export const metadata: Metadata = { title: "Your recordings", robots: NOINDEX };
 
 type Row = {
   id: string; r2_key: string; duration_ms: number; status: "pending_model" | "model_done" | "reviewed" | "rejected";
