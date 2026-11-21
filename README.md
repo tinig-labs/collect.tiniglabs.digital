@@ -1,8 +1,8 @@
 <h1 align="center">
   <a href="https://collect.tiniglabs.digital">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="public/banner-dark.svg">
-      <img alt="tinig labs" src="public/banner.svg" width="520">
+      <source media="(prefers-color-scheme: dark)" srcset="public/banner-dark.png">
+      <img alt="tinig labs speech corpus" src="public/banner.png" width="520">
     </picture>
   </a>
 </h1>
@@ -48,6 +48,7 @@ The corpus is in closed beta. To take part, ask for an invite on the [contact pa
 | `/signup`, `/login`, `/forgot-password`, `/onboarding`, `/account` | Accounts, consent and profile |
 | `/admin` | For admins: invite codes, contact messages and the dataset export |
 | `/contact`, `/sources`, `/terms`, `/privacy` | Contact form, prompt attribution, Terms of Service and Privacy Policy |
+| `/brand` | The brand guide: the logo family, colours, type and logo downloads |
 
 The site runs on Cloudflare Workers with Neon Postgres and Neon Auth. Audio goes straight from the browser to Cloudflare R2. The model runs on Modal in batches every 30 minutes.
 
@@ -69,6 +70,7 @@ Every push to `main` deploys to production.
 - [CONTRIBUTING.md](CONTRIBUTING.md): how to report bugs and security problems, and how to propose changes
 - [LICENSING.md](LICENSING.md): which license covers the code, the model code and the data
 - [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md): the software, data sources, model and services the corpus is built on
+- [BRAND.md](BRAND.md): the logo family, colours and type, also at [/brand](https://collect.tiniglabs.digital/brand)
 
 ## License
 

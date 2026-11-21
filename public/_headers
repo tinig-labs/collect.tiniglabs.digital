@@ -4,3 +4,7 @@
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
+
+# Logo files: downloads from /brand. Names don't change when a file does, so keep caching short.
+/brand/*
+  Cache-Control: public, max-age=86400
