@@ -21,7 +21,7 @@ export default function Page() {
       }
     >
       {CLOSED_BETA && (
-        <p className="rounded-2xl bg-surface px-4 py-3 text-sm leading-relaxed text-text">
+        <p className="rounded-md bg-surface px-4 py-3 text-sm leading-relaxed text-text">
           <span className="font-semibold">Closed beta.</span> You need an invite code to contribute.{" "}
           <Link href="/contact?topic=beta" className="font-semibold text-accent underline underline-offset-4">Request one</Link>
         </p>

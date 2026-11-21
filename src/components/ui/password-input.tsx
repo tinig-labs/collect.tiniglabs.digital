@@ -14,7 +14,7 @@ export function PasswordInput({ className = "", ...p }: Omit<ComponentProps<"inp
         onClick={() => setShown((s) => !s)}
         aria-label={shown ? "Hide password" : "Show password"}
         aria-pressed={shown}
-        className="absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-r-2xl text-muted transition-colors hover:text-text focus-visible:text-text"
+        className="absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-r-md text-muted transition-colors hover:text-text focus-visible:text-text"
       >
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />

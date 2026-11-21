@@ -28,7 +28,7 @@ export default async function Page({ searchParams }: PageProps<"/contact">) {
       </p>
       <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_20rem] lg:gap-12">
         <ContactForm name={user?.name ?? ""} email={user?.email ?? ""} topic={typeof topic === "string" ? topic : "general"} />
-        <aside className="space-y-6">
+        <aside className="space-y-6 self-start rounded-lg bg-surface p-6 sm:p-8">
           {NOTES.map((n) => (
             <div key={n.title}>
               <h2 className="font-semibold">{n.title}</h2>

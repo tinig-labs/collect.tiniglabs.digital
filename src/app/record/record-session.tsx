@@ -133,6 +133,22 @@ export function RecordSession() {
   }, [rec, submit, advance, startTake]);
 
   const seconds = (rec.elapsed / 1000).toFixed(1);
+  const recording = rec.state === "recording";
+  const busy = rec.state === "starting" || rec.state === "processing";
+  // Spoken and shown in words, so the state never depends on colour alone.
+  const status = submitting
+    ? "Uploading your take…"
+    : recording
+      ? "Recording"
+      : rec.state === "starting"
+        ? "Starting the microphone…"
+        : rec.state === "processing"
+          ? "Saving the take…"
+          : rec.state === "recorded"
+            ? "Listen back, then submit or re-record"
+            : prompt
+              ? "Ready to record"
+              : "";
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
@@ -145,7 +161,7 @@ export function RecordSession() {
               aria-pressed={kind === k}
               disabled={rec.state === "recording" || submitting}
               title={rec.state === "recorded" && kind !== k ? "Switching discards your unsent take" : undefined}
-              className={`rounded-full px-4 py-2 font-semibold capitalize transition-colors disabled:opacity-50 sm:py-1.5 ${kind === k ? "bg-card shadow-sm" : "text-text/60 hover:text-text"}`}
+              className={`rounded-full px-4 py-2 font-semibold capitalize transition-colors disabled:opacity-50 sm:py-1.5 ${kind === k ? "bg-card text-text ring-1 ring-inset ring-accent/25" : "text-text/70 hover:text-text"}`}
             >
               {k === "all" ? "Mixed" : `${k}s`}
             </button>
@@ -153,19 +169,19 @@ export function RecordSession() {
         </div>
         <div className="flex items-center justify-between gap-3 sm:justify-end">
           <span className="text-sm font-medium text-muted tabular-nums">{done} recorded this session</span>
-          <ButtonLink href="/record/history" variant="secondary" className="h-9 rounded-full px-4">
+          <ButtonLink href="/record/history" variant="secondary" className="h-9 px-4">
             Your recordings
           </ButtonLink>
         </div>
       </div>
 
-      <div className="rounded-[28px] bg-card">
-        <div className="flex min-h-56 flex-col items-center justify-center gap-4 px-5 py-10 text-center sm:px-6 sm:py-12">
+      <div className={`rounded-lg bg-card transition-shadow ${recording ? "ring-2 ring-accent" : "ring-1 ring-border"}`}>
+        <div className="flex min-h-56 flex-col items-center justify-center gap-5 px-5 py-10 text-center sm:px-8 sm:py-14">
           {loading ? (
             <span className="text-muted">Loading…</span>
           ) : prompt ? (
             <>
-              <p className={`font-medium tracking-tight ${prompt.kind === "word" ? "text-4xl sm:text-5xl" : "text-2xl leading-snug sm:text-3xl"}`}>
+              <p className={`text-balance font-medium tracking-tight ${prompt.kind === "word" ? "text-4xl sm:text-5xl" : "text-2xl leading-snug sm:text-3xl"}`}>
                 {prompt.text}
               </p>
               <Badge>{SOURCE_LABEL[prompt.source] ?? prompt.source}</Badge>
@@ -176,12 +192,25 @@ export function RecordSession() {
         </div>
 
         {/* On phones the controls stay above the tab bar, in reach of a thumb. */}
-        <div className="sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] z-10 flex flex-col items-center gap-4 rounded-b-[28px] border-t border-border bg-card px-4 py-4 sm:static sm:px-6 sm:py-6">
-          <div className="flex h-6 w-full max-w-xs items-center gap-3">
-            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface" aria-hidden>
-              <div className="h-full bg-accent transition-[width] duration-75" style={{ width: `${rec.level * 100}%` }} />
+        <div className="sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] z-10 flex flex-col items-center gap-4 rounded-b-lg border-t border-border bg-card px-4 py-4 sm:static sm:px-8 sm:py-6">
+          <div className="flex w-full max-w-sm flex-col items-center gap-2">
+            <p role="status" aria-live="polite" className="flex min-h-5 items-center gap-2 text-sm font-semibold text-text">
+              {status && (
+                <span
+                  aria-hidden="true"
+                  className={`inline-block size-2.5 shrink-0 ${recording ? "animate-pulse rounded-full bg-accent" : rec.state === "recorded" ? "rounded-[2px] bg-accent" : "rounded-full ring-2 ring-inset ring-text/40"}`}
+                />
+              )}
+              {status}
+            </p>
+            <div className="flex h-5 w-full items-center gap-3">
+              <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface" aria-hidden>
+                <div className="h-full rounded-full bg-accent transition-[width] duration-75" style={{ width: `${rec.level * 100}%` }} />
+              </div>
+              <span className="w-10 text-right text-xs font-medium text-muted tabular-nums" aria-label={recording ? `${seconds} seconds` : undefined}>
+                {seconds}s
+              </span>
             </div>
-            <span className="w-10 text-right text-xs text-muted tabular-nums">{seconds}s</span>
           </div>
 
           {rec.state === "recorded" && rec.result && (
@@ -190,29 +219,49 @@ export function RecordSession() {
             </div>
           )}
 
-          <div className="grid w-full max-w-md grid-cols-2 gap-2 sm:flex sm:w-auto sm:flex-wrap sm:justify-center">
-            {rec.state === "recording" ? (
-              <Button onClick={() => void rec.stop()} variant="danger" className="col-span-2 h-14 text-base sm:h-11 sm:w-36 sm:text-sm">
-                <span className="size-2 animate-pulse rounded-full bg-danger" /> Stop
-              </Button>
-            ) : rec.state === "recorded" ? (
+          <div className="grid w-full max-w-md grid-cols-2 gap-2 sm:flex sm:w-auto sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
+            {rec.state === "recorded" ? (
               <>
-                <Button variant="secondary" onClick={rec.reset} className="h-14 text-base sm:h-11 sm:text-sm">Re-record</Button>
-                <Button onClick={() => void submit()} disabled={submitting} className="h-14 text-base sm:h-11 sm:w-36 sm:text-sm">
+                <Button variant="secondary" onClick={rec.reset} className="h-14 text-base sm:h-12 sm:px-6">Re-record</Button>
+                <Button onClick={() => void submit()} disabled={submitting} className="h-14 text-base sm:h-12 sm:w-40">
                   {submitting ? "Uploading…" : "Submit"}
                 </Button>
               </>
             ) : (
-              <Button onClick={startTake} disabled={!prompt || rec.state !== "idle"} className="col-span-2 h-14 text-base sm:h-11 sm:w-36 sm:text-sm">
-                {rec.state === "starting" || rec.state === "processing" ? "…" : "Record"}
-              </Button>
+              // One round button for record and stop: the icon, the label and the ring all change, not just the colour.
+              <button
+                type="button"
+                onClick={recording ? () => void rec.stop() : startTake}
+                disabled={recording ? false : !prompt || rec.state !== "idle"}
+                aria-pressed={recording}
+                className={`col-span-2 mx-auto inline-flex h-14 w-full items-center justify-center gap-3 rounded-full px-6 text-base font-semibold transition-[background-color,box-shadow] duration-200 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-accent disabled:pointer-events-none disabled:opacity-50 sm:w-auto sm:min-w-44 ${
+                  recording
+                    ? "rec-breathe bg-card text-text ring-2 ring-inset ring-accent hover:bg-surface"
+                    : "bg-accent text-accent-fg hover:bg-accent-hover"
+                }`}
+              >
+                <span
+                  aria-hidden="true"
+                  className={`flex size-8 items-center justify-center rounded-full ${recording ? "bg-accent" : "bg-white/15"}`}
+                >
+                  {recording ? (
+                    <span className="block size-3 rounded-[3px] bg-white" />
+                  ) : (
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="9" y="3" width="6" height="11" rx="3" />
+                      <path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" />
+                    </svg>
+                  )}
+                </span>
+                {recording ? "Stop" : busy ? "…" : "Record"}
+              </button>
             )}
-            <Button variant="ghost" onClick={advance} disabled={!prompt || rec.state === "recording"} className="col-span-2 h-10 sm:h-11">
+            <Button variant="ghost" onClick={advance} disabled={!prompt || rec.state === "recording"} className="col-span-2 h-10 sm:h-12">
               Skip prompt
             </Button>
           </div>
 
-          {(rec.error || msg) && <p role="alert" className="text-sm text-danger">{rec.error ?? msg}</p>}
+          {(rec.error || msg) && <p role="alert" className="text-center text-sm text-danger">{rec.error ?? msg}</p>}
         </div>
       </div>
 

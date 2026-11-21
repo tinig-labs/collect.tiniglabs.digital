@@ -17,7 +17,7 @@ export function ContactForm({ name, email, topic }: { name: string; email: strin
 
   if (state?.sent) {
     return (
-      <div role="status" className="rounded-[28px] bg-surface p-6 sm:p-10">
+      <div role="status" className="rounded-lg bg-surface p-6 sm:p-8">
         <h2 className="text-2xl font-semibold tracking-tight">Message sent.</h2>
         <p className="mt-3 leading-relaxed text-muted">Thank you. We usually reply within a few days, to the email you gave.</p>
       </div>
@@ -25,7 +25,7 @@ export function ContactForm({ name, email, topic }: { name: string; email: strin
   }
 
   return (
-    <form ref={form} action={action} className="space-y-4 rounded-[28px] bg-card p-6 sm:p-10">
+    <form ref={form} action={action} className="space-y-4 rounded-lg bg-card ring-1 ring-inset ring-border p-6 sm:p-8">
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Name">
           <Input name="name" autoComplete="name" defaultValue={name} required maxLength={120} />
@@ -48,7 +48,7 @@ export function ContactForm({ name, email, topic }: { name: string; email: strin
           minLength={10}
           maxLength={5000}
           rows={6}
-          className="w-full rounded-xl bg-card px-4 py-3 text-base sm:text-[0.9375rem] leading-relaxed ring-1 ring-inset ring-[var(--tinta)]/15 placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent"
+          className="w-full rounded-md bg-card px-4 py-3 text-base sm:text-[0.9375rem] leading-relaxed ring-1 ring-inset ring-[var(--tinta)]/15 placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent"
           placeholder="How can we help?"
         />
       </Field>

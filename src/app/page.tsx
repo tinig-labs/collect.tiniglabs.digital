@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { ButtonLink } from "@/components/ui";
+import { Mark } from "@/components/brand";
+import { ButtonLink, Eyebrow } from "@/components/ui";
 import { CLOSED_BETA, SITE_URL } from "@/lib/constants";
 import { ORGANIZATION, jsonLd, publicPage } from "@/lib/seo";
 import { getStats } from "@/lib/stats";
@@ -47,8 +48,9 @@ export default async function Home() {
   return (
     <div className="space-y-20 sm:space-y-28">
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(DATASET_JSON_LD)} />
-      <section className="max-w-3xl pt-4 sm:pt-10">
-        <p className="flex flex-wrap items-center gap-2 text-sm font-medium text-accent">
+      <section className="grid items-center gap-10 pt-4 sm:pt-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-16">
+        <div className="max-w-3xl">
+        <p className="flex flex-wrap items-center gap-2 text-sm font-semibold text-accent">
           Open Tagalog speech corpus
           {CLOSED_BETA && <span className="rounded-full bg-surface px-3 py-1 text-xs font-semibold">Closed beta</span>}
         </p>
@@ -71,27 +73,32 @@ export default async function Home() {
             Contributing is invite-only while we test. Have a code? Create an account and enter it during onboarding.
           </p>
         )}
+        </div>
+        {/* The Banig weave: many voices woven into one dataset. Decorative; the lockup in the header names it. */}
+        <div aria-hidden="true" className="hidden aspect-square items-center justify-center rounded-lg bg-surface lg:flex">
+          <Mark name="corpus" size={176} className="size-44" />
+        </div>
       </section>
 
-      <section className="grid grid-cols-2 gap-6 rounded-[28px] bg-card p-6 sm:p-10 md:grid-cols-4">
+      <section aria-label="Corpus so far" className="grid grid-cols-2 gap-6 rounded-lg bg-card ring-1 ring-inset ring-border p-6 sm:p-8 md:grid-cols-4">
         {stats.map(([label, value]) => (
           <div key={label}>
-            <div className="text-3xl font-semibold tabular-nums tracking-tight sm:text-4xl">{value}</div>
-            <div className="mt-1 text-sm font-medium text-muted">{label}</div>
+            <div className="text-sm font-medium text-muted">{label}</div>
+            <div className="mt-2 text-3xl font-semibold tabular-nums tracking-tight sm:text-4xl">{value}</div>
           </div>
         ))}
       </section>
 
       <section className="grid gap-6 md:grid-cols-2">
-        <div className="rounded-[28px] bg-card p-6 sm:p-10">
-          <p className="text-sm font-medium text-accent">Speakers</p>
+        <div className="rounded-lg bg-card ring-1 ring-inset ring-border p-6 sm:p-8">
+          <Eyebrow>Speakers</Eyebrow>
           <h2 className="mt-3 text-2xl font-semibold tracking-tight">Record in a few minutes</h2>
           <p className="mt-3 leading-relaxed text-muted">
             Create an account, give consent, and read prompts in a quiet room. Each clip takes a few seconds.
           </p>
         </div>
-        <div className="rounded-[28px] bg-surface p-6 sm:p-10">
-          <p className="text-sm font-medium text-accent">SLPs and linguists</p>
+        <div className="rounded-lg bg-surface p-6 sm:p-8">
+          <Eyebrow>SLPs and linguists</Eyebrow>
           <h2 className="mt-3 text-2xl font-semibold tracking-tight">Verify the IPA</h2>
           <p className="mt-3 leading-relaxed text-muted">
             Join with an invite code. Approve or correct model transcriptions with the on-screen IPA keyboard.

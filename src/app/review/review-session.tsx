@@ -130,7 +130,7 @@ export function ReviewSession() {
         </div>
       </div>
 
-      <div className="rounded-[28px] bg-card">
+      <div className="rounded-lg bg-card ring-1 ring-inset ring-border">
         <div className="space-y-4 p-5 sm:p-8">
           <div className="text-xs text-muted">Prompt ({item.kind})</div>
           <p className="text-xl font-medium">{item.text}</p>
@@ -153,13 +153,13 @@ export function ReviewSession() {
             spellCheck={false}
             autoCapitalize="off"
             autoCorrect="off"
-            className="ipa w-full resize-y rounded-2xl bg-card px-4 py-3 text-2xl leading-relaxed ring-1 ring-inset ring-[var(--tinta)]/15 focus:outline-none focus:ring-2 focus:ring-accent"
+            className="ipa w-full resize-y rounded-md bg-card px-4 py-3 text-2xl leading-relaxed ring-1 ring-inset ring-[var(--tinta)]/15 focus:outline-none focus:ring-2 focus:ring-accent"
           />
           <IpaKeyboard value={ipa} onChange={setIpa} targetRef={field} />
         </div>
 
         {/* Sticky above the phone tab bar, so the decision is always one tap away. */}
-        <div className="sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] z-10 flex flex-wrap items-center gap-2 rounded-b-[28px] border-t border-border bg-card p-3 sm:static sm:p-5">
+        <div className="sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] z-10 flex flex-wrap items-center gap-2 rounded-b-lg border-t border-border bg-card p-3 sm:static sm:p-5">
           {edited ? (
             <Button onClick={() => void send("correct")} disabled={busy} className="flex-1 sm:flex-none">Submit correction</Button>
           ) : (

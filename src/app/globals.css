@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
-/* tinig labs palette: pandan, mint, milk (gatas), ink (tinta), grey (abo). Light only, like tiniglabs.digital. */
+/*
+ * tinig labs tokens (see BRAND.md): gatas (milk), tinta (ink), abo (grey), pandan, mint and dahon (leaf).
+ * Light only, like tiniglabs.digital. Dahon is an accent on pandan surfaces only, never text on gatas.
+ */
 :root {
   --gatas: #f9fbfa;
   --tinta: #13261f;
@@ -8,7 +11,9 @@
   --pandan: #1f6b4f;
   --pandan-hover: #185a42;
   --mint: #e2f3ea;
+  --dahon: #7fc8a4;
   --rose: #b4234a;
+  --rose-tint: #fbeef1;
   --line: rgb(19 38 31 / 0.1);
 }
 
@@ -22,11 +27,18 @@
   --color-accent: var(--pandan);
   --color-accent-hover: var(--pandan-hover);
   --color-accent-fg: #ffffff;
+  --color-dahon: var(--dahon);
   --color-danger: var(--rose);
+  --color-danger-tint: var(--rose-tint);
   --color-ok: var(--pandan);
   --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
   --font-brand: var(--font-montserrat), var(--font-figtree), sans-serif;
   --font-ipa: var(--font-noto), "Charis SIL", "Doulos SIL", "Gentium Plus", "Segoe UI", sans-serif;
+  /* Radius tokens: sm for small controls and tags, md for inset panels and fields, lg for cards
+     (the same 24-unit corner as the tinig labs mark's squares). Pills and buttons use rounded-full. */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
 }
 
 html {
@@ -50,4 +62,26 @@ body {
 
 ::selection {
   background: var(--mint);
+}
+
+/* Recording: a slow, quiet ring around the record button. Off for people who ask for less motion. */
+@keyframes rec-breathe {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(31 107 79 / 0.28);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgb(31 107 79 / 0);
+  }
+}
+
+.rec-breathe {
+  animation: rec-breathe 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rec-breathe,
+  .animate-pulse {
+    animation: none;
+  }
 }

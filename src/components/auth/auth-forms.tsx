@@ -42,7 +42,7 @@ export function LoginForm() {
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       {params.get("reset") === "1" && (
-        <p role="status" className="rounded-2xl bg-surface px-4 py-3 text-sm text-text">
+        <p role="status" className="rounded-md bg-surface px-4 py-3 text-sm text-text">
           Password updated. Sign in with your new password.
         </p>
       )}

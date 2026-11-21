@@ -108,7 +108,7 @@ export function SiteHeader() {
                   href={i.href}
                   aria-current={active ? "page" : undefined}
                   className={`flex h-full flex-col items-center justify-center gap-1 text-[0.6875rem] font-semibold transition-colors ${
-                    active ? "text-accent" : "text-text/55 active:text-text"
+                    active ? "text-accent" : "text-text/70 active:text-text"
                   }`}
                 >
                   <span className={`flex h-7 w-12 items-center justify-center rounded-full transition-colors ${active ? "bg-surface" : ""}`}>

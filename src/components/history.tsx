@@ -40,7 +40,7 @@ export function HistoryHeader({ title, back, count, page, pages }: { title: stri
 }
 
 export function HistoryItem({ children }: { children: ReactNode }) {
-  return <li className="space-y-4 rounded-[28px] bg-card p-5 sm:p-6">{children}</li>;
+  return <li className="space-y-4 rounded-lg bg-card ring-1 ring-inset ring-border p-5 sm:p-6">{children}</li>;
 }
 
 export function Ipa({ label, value }: { label: string; value: string | null }) {
@@ -53,7 +53,7 @@ export function Ipa({ label, value }: { label: string; value: string | null }) {
 }
 
 export function Empty({ children }: { children: ReactNode }) {
-  return <div className="rounded-[28px] bg-card px-6 py-16 text-center text-muted">{children}</div>;
+  return <div className="rounded-lg bg-card ring-1 ring-inset ring-border px-6 py-16 text-center text-muted">{children}</div>;
 }
 
 /** Page numbers to show: always first and last, the current page and its neighbours, gaps as null. */
@@ -73,12 +73,12 @@ export const totalPages = (count: number) => Math.max(1, Math.ceil(count / HISTO
 export function Pager({ path, page, pages }: { path: string; page: number; pages: number }) {
   if (pages <= 1) return null;
   const href = (n: number) => (n === 1 ? path : `${path}?page=${n}`);
-  const cell = "inline-flex h-10 min-w-10 items-center justify-center rounded-xl px-3 text-sm font-semibold tabular-nums";
+  const cell = "inline-flex h-10 min-w-10 items-center justify-center rounded-sm px-3 text-sm font-semibold tabular-nums";
   const idle = `${cell} text-text/70 hover:bg-surface hover:text-text`;
   const edge = `${cell} gap-1 bg-card ring-1 ring-inset ring-border hover:bg-surface`;
   const off = `${cell} gap-1 text-text/30`;
   return (
-    <nav aria-label="Pagination" className="flex flex-wrap items-center justify-between gap-3 rounded-[20px] bg-card p-2">
+    <nav aria-label="Pagination" className="flex flex-wrap items-center justify-between gap-3 rounded-md bg-card p-2">
       {page > 1 ? (
         <Link className={edge} href={href(page - 1)} rel="prev">← Newer</Link>
       ) : (
