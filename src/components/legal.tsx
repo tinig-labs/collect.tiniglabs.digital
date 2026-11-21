@@ -69,8 +69,8 @@ const COLS = [
 /** The mint-framed summary table used on tiniglabs.digital/privacy. */
 export function DataTable({ rows, note }: { rows: Row[]; note: ReactNode }) {
   return (
-    <div className="rounded-[28px] bg-surface p-3">
-      <div className="rounded-[20px] bg-card px-6 py-2 sm:px-8">
+    <div className="rounded-lg bg-surface p-3">
+      <div className="rounded-md bg-card px-6 py-2 sm:px-8">
         <table className="w-full text-left">
           <caption className="sr-only">Data the speech corpus collects</caption>
           <thead className="hidden md:table-header-group">

@@ -35,7 +35,7 @@ export default async function Page() {
         <ButtonLink href="/api/admin/export" variant="secondary" prefetch={false}>Export manifest (CSV)</ButtonLink>
       </PageHeader>
 
-      <div className="grid grid-cols-2 gap-6 rounded-[28px] bg-card p-6 sm:grid-cols-4 sm:p-8">
+      <div className="grid grid-cols-2 gap-6 rounded-lg bg-card ring-1 ring-inset ring-border p-6 sm:grid-cols-4 sm:p-8">
         {tiles.map(([label, n]) => (
           <div key={label}>
             <div className="text-2xl font-semibold tabular-nums tracking-tight">{n.toLocaleString("en-US")}</div>
@@ -49,11 +49,11 @@ export default async function Page() {
           Messages <span className="font-normal text-muted tabular-nums">({inbox.length} open)</span>
         </h2>
         {inbox.length === 0 ? (
-          <p className="rounded-[28px] bg-card px-6 py-8 text-center text-sm text-muted">No open messages.</p>
+          <p className="rounded-lg bg-card ring-1 ring-inset ring-border px-6 py-8 text-center text-sm text-muted">No open messages.</p>
         ) : (
           <ul className="space-y-3">
             {inbox.map((m) => (
-              <li key={m.id} className="space-y-3 rounded-[28px] bg-card p-5 sm:p-6">
+              <li key={m.id} className="space-y-3 rounded-lg bg-card ring-1 ring-inset ring-border p-5 sm:p-6">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
                     <p className="font-semibold">{m.name} <span className="font-normal text-muted">· {m.email}</span></p>
@@ -99,7 +99,7 @@ export default async function Page() {
         </form>
       </Card>
 
-      <div className="overflow-x-auto rounded-[28px] bg-card">
+      <div className="overflow-x-auto rounded-lg bg-card ring-1 ring-inset ring-border">
         <table className="w-full text-left text-sm">
           <thead className="border-b border-border text-xs text-muted">
             <tr>

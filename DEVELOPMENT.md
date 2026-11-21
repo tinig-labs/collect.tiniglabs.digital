@@ -69,7 +69,8 @@ CI runs the same checks on every pull request.
 
 ## Design conventions
 
-- Colours come from the tokens in `src/app/globals.css`: pandan, mint, gatas (milk), tinta (ink) and abo (grey). The site is light only, like tiniglabs.digital.
+- Colours and radii come from the tokens in `src/app/globals.css`: pandan, mint, gatas (milk), tinta (ink), abo (grey) and dahon (leaf, only on pandan surfaces). Cards use `rounded-lg` (24 px), fields and panels `rounded-md` (16 px), tags `rounded-sm` (8 px), and buttons and pills `rounded-full`. The site is light only, like tiniglabs.digital.
+- Show logos with the components in `src/components/brand.tsx`. [BRAND.md](BRAND.md) has the rules.
 - Use the components in `src/components/ui`.
 - Text is Figtree, the tinig labs name is Montserrat, and IPA is Noto Sans. All three are served through `next/font`.
 - Layouts must work at 375px wide. On phones, navigation and the main actions sit in a bottom bar, within reach of a thumb.

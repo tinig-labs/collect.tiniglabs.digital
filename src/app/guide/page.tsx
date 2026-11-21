@@ -27,8 +27,8 @@ const Ipa = ({ children }: { children: ReactNode }) => <span className="font-ipa
 
 function Table({ head, rows }: { head: string[]; rows: ReactNode[][] }) {
   return (
-    <div className="mt-6 overflow-x-auto rounded-[20px] bg-surface p-2">
-      <table className="w-full min-w-[30rem] rounded-[14px] bg-card text-left text-sm">
+    <div className="mt-6 overflow-x-auto rounded-md bg-surface p-2">
+      <table className="w-full min-w-[30rem] rounded-sm bg-card text-left text-sm">
         <thead className="text-muted">
           <tr>
             {head.map((h) => (
@@ -69,7 +69,7 @@ export default function GuidePage() {
           <ol className="-mx-5 mt-3 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 lg:flex-col lg:gap-1">
             {TOC.map((t) => (
               <li key={t.id}>
-                <a href={`#${t.id}`} className="block whitespace-nowrap rounded-full bg-card px-3.5 py-2 text-sm font-medium text-text/75 hover:bg-surface hover:text-text lg:rounded-xl lg:bg-transparent">
+                <a href={`#${t.id}`} className="block whitespace-nowrap rounded-full bg-card px-3.5 py-2 text-sm font-medium text-text/75 hover:bg-surface hover:text-text lg:rounded-sm lg:bg-transparent">
                   {t.label}
                 </a>
               </li>

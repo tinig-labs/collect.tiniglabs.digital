@@ -10,7 +10,7 @@ export default async function Page({ searchParams }: PageProps<"/onboarding">) {
   const { invite } = await searchParams;
   return (
     <div className="mx-auto max-w-xl space-y-6">
-      <h1 className="text-2xl font-semibold tracking-tight">Before you start</h1>
+      <h1 className="text-3xl font-medium tracking-[-0.03em] sm:text-4xl">Before you start</h1>
       <OnboardingForm invite={typeof invite === "string" ? invite : ""} role={user.role} />
     </div>
   );

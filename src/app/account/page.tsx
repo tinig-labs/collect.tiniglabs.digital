@@ -14,7 +14,7 @@ const ROLE = { speaker: "Speaker", reviewer: "Reviewer", admin: "Admin" } as con
 
 function Section({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
   return (
-    <section className="grid gap-6 rounded-[28px] bg-card p-6 sm:p-8 md:grid-cols-[14rem_1fr] md:gap-10">
+    <section className="grid gap-6 rounded-lg bg-card ring-1 ring-inset ring-border p-6 sm:p-8 md:grid-cols-[14rem_1fr] md:gap-10">
       <div>
         <h2 className="font-semibold">{title}</h2>
         {hint && <p className="mt-1.5 text-sm leading-relaxed text-muted">{hint}</p>}
@@ -55,7 +55,7 @@ export default async function Page() {
 
       <section className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {stats.map((s) => (
-          <Link key={s.label} href={s.href} className="rounded-[28px] bg-card p-6 transition-colors hover:bg-surface">
+          <Link key={s.label} href={s.href} className="rounded-lg bg-card ring-1 ring-inset ring-border p-6 transition-colors hover:bg-surface">
             <div className="text-3xl font-semibold tabular-nums tracking-tight">{s.value.toLocaleString("en-PH")}</div>
             <div className="mt-1 text-sm font-medium text-muted">{s.label} →</div>
           </Link>

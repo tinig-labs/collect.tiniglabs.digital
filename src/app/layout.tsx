@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { Figtree, Montserrat, Noto_Sans } from "next/font/google";
 import { SiteHeader } from "@/components/site-header";
-import { Brand, Wordmark } from "@/components/brand";
+import { Brand, LabWordmark, Wordmark } from "@/components/brand";
 import { MAIN_SITE_URL, SITE_URL, UNDER_DEVELOPMENT } from "@/lib/constants";
 import "./globals.css";
 
@@ -32,7 +32,14 @@ export const metadata: Metadata = {
     "cleft palate speech",
     "speech recognition",
   ],
-  icons: { icon: "/logo.svg" },
+  // Speech corpus app icon (Banig weave on pandan). favicon.ico in src/app covers older browsers.
+  icons: {
+    icon: [
+      { url: "/brand/corpus-app-icon.svg", type: "image/svg+xml" },
+      { url: "/brand/corpus-app-icon-32.png", type: "image/png", sizes: "32x32" },
+    ],
+    apple: [{ url: "/brand/corpus-app-icon-180.png", sizes: "180x180" }],
+  },
   openGraph: { type: "website", siteName: "tinig labs", locale: "en_PH", description },
   twitter: { card: "summary_large_image", description },
 };
@@ -46,6 +53,7 @@ const FOOTER_LINKS = [
   { label: "Sources & licenses", href: "/sources" },
   { label: "Terms", href: "/terms" },
   { label: "Privacy", href: "/privacy" },
+  { label: "Brand", href: "/brand" },
   { label: "tiniglabs.digital", href: MAIN_SITE_URL },
 ];
 
@@ -70,17 +78,26 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <ul className="flex flex-wrap gap-x-7 gap-y-2 text-sm font-medium">
               {FOOTER_LINKS.map((l) => (
                 <li key={l.href}>
-                  <a href={l.href} className="text-text/80 underline-offset-4 transition-colors hover:text-accent hover:underline">
+                  <a href={l.href} className="rounded-sm text-text/80 underline-offset-4 transition-colors hover:text-accent hover:underline">
                     {l.label}
                   </a>
                 </li>
               ))}
             </ul>
           </div>
-          <div className="mt-8 border-t border-border pt-6 text-sm text-muted">
+          <div className="mt-8 flex flex-col gap-4 border-t border-border pt-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
             <p>
               <Brand>tinig</Brand> is Filipino for voice. © 2026 <Brand />
             </p>
+            {/* The parent lab gets its own mark, the Echo t. */}
+            <a
+              href={MAIN_SITE_URL}
+              aria-label="A project of tinig labs: tiniglabs.digital"
+              className="inline-flex items-center gap-2.5 self-start rounded-full py-1 pl-1 pr-3 transition-colors hover:bg-surface sm:self-auto"
+            >
+              <span className="text-xs font-medium text-muted">A project of</span>
+              <LabWordmark />
+            </a>
           </div>
         </footer>
       </body>

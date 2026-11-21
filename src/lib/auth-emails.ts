@@ -79,16 +79,16 @@ export function otpEmail(type: OtpType, code: string, expiresAt?: string) {
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px">
     <tr><td style="padding:0 8px 24px">
       <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-        <td style="vertical-align:middle"><img src="${SITE}/email-logo.png" width="32" height="32" alt="" style="display:block;border:0"></td>
+        <td style="vertical-align:middle"><img src="${SITE}/email/corpus-mark-96.png" width="32" height="32" alt="" style="display:block;border:0"></td>
         <td style="vertical-align:middle;padding-left:10px;font-family:Montserrat,${SANS};font-size:18px;font-weight:600;letter-spacing:-0.02em;color:${C.tinta}">tinig labs</td>
         <td style="vertical-align:middle;padding-left:8px;font-size:14px;font-weight:500;color:${C.abo}">speech corpus</td>
       </tr></table>
     </td></tr>
-    <tr><td style="background:#ffffff;border-radius:28px;padding:40px 32px">
+    <tr><td style="background:#ffffff;border-radius:24px;padding:40px 32px;border:1px solid ${C.line}">
       <h1 style="margin:0;font-size:28px;line-height:1.15;font-weight:500;letter-spacing:-0.03em;color:${C.tinta}">${esc(c.heading)}</h1>
       <p style="margin:16px 0 0;font-size:16px;line-height:1.6;color:${C.abo}">${esc(c.intro)}</p>
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0 0">
-        <tr><td align="center" style="background:${C.mint};border-radius:20px;padding:24px 16px">
+        <tr><td align="center" style="background:${C.mint};border-radius:16px;padding:24px 16px">
           <div style="font-family:${MONO};font-size:34px;line-height:1;font-weight:600;letter-spacing:0.18em;color:${C.pandan}">${digits}</div>
         </td></tr>
       </table>
@@ -96,7 +96,10 @@ export function otpEmail(type: OtpType, code: string, expiresAt?: string) {
       <p style="margin:12px 0 0;font-size:14px;line-height:1.6;color:${C.abo}">${esc(c.ignore)}</p>
     </td></tr>
     <tr><td style="padding:24px 8px 0;font-size:13px;line-height:1.6;color:${C.abo}">
-      A public Tagalog speech corpus by tinig labs.<br>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 8px"><tr>
+        <td style="vertical-align:middle"><img src="${SITE}/email/tinig-labs-mark-48.png" width="24" height="24" alt="" style="display:block;border:0"></td>
+        <td style="vertical-align:middle;padding-left:8px;font-size:13px;color:${C.abo}">A public Tagalog speech corpus by <a href="https://tiniglabs.digital" style="font-family:Montserrat,${SANS};font-weight:600;letter-spacing:-0.02em;color:${C.tinta};text-decoration:none">tinig labs</a>.</td>
+      </tr></table>
       Questions? <a href="mailto:hello@tiniglabs.digital" style="color:${C.pandan};text-decoration:none;font-weight:600">hello@tiniglabs.digital</a>
       &nbsp;·&nbsp; <a href="${SITE}" style="color:${C.pandan};text-decoration:none;font-weight:600">collect.tiniglabs.digital</a>
     </td></tr>

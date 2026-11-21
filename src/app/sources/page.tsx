@@ -42,7 +42,7 @@ export default function Sources() {
           and license are stored with each prompt and included in dataset exports.
         </p>
       </div>
-      <div className="divide-y divide-border rounded-[28px] bg-card">
+      <div className="divide-y divide-border rounded-lg bg-card ring-1 ring-inset ring-border">
         {sources.map((s) => (
           <div key={s.name} className="grid gap-1 p-6 sm:grid-cols-[1fr_auto] sm:gap-6">
             <div>

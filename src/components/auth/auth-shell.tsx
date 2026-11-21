@@ -3,8 +3,8 @@ import type { ReactNode } from "react";
 export function AuthShell({ title, children, footer }: { title: string; children: ReactNode; footer?: ReactNode }) {
   return (
     <div className="mx-auto w-full max-w-md space-y-6 pt-4">
-      <div className="space-y-6 rounded-[28px] bg-card p-6 sm:p-10">
-        <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+      <div className="space-y-6 rounded-lg bg-card ring-1 ring-inset ring-border p-6 sm:p-8">
+        <h1 className="text-3xl font-medium tracking-[-0.03em]">{title}</h1>
         {children}
       </div>
       {footer && <div className="px-2 text-sm text-muted">{footer}</div>}

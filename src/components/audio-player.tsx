@@ -92,7 +92,7 @@ export function AudioPlayer({
   const progress = duration ? time / duration : 0;
 
   return (
-    <div className="flex w-full items-center gap-3 rounded-[20px] bg-surface p-2 pr-4">
+    <div className="flex w-full items-center gap-3 rounded-md bg-surface p-2 pr-4">
       <audio
         ref={el}
         src={src}
@@ -143,7 +143,7 @@ export function AudioPlayer({
           else return;
           e.preventDefault();
         }}
-        className="flex h-10 min-w-0 flex-1 cursor-pointer items-center gap-[2px] rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+        className="flex h-10 min-w-0 flex-1 cursor-pointer items-center gap-[2px] rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
       >
         {Array.from({ length: BARS }, (_, i) => {
           const h = peaks ? peaks[i] : 0.18;
@@ -171,7 +171,7 @@ export function AudioPlayer({
               type="button"
               onClick={() => onRateChange(r)}
               aria-pressed={rate === r}
-              className={`rounded-full px-2.5 py-1 font-semibold transition-colors ${rate === r ? "bg-accent text-accent-fg" : "text-text/60 hover:text-text"}`}
+              className={`rounded-full px-2.5 py-1 font-semibold transition-colors ${rate === r ? "bg-accent text-accent-fg" : "text-text/75 hover:text-text"}`}
             >
               {r}×
             </button>

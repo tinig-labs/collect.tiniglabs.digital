@@ -25,7 +25,7 @@ export const ORGANIZATION = {
   "@id": `${MAIN_SITE_URL}/#organization`,
   name: "tinig labs",
   url: `${MAIN_SITE_URL}/`,
-  logo: `${MAIN_SITE_URL}/logo.svg`,
+  logo: `${SITE_URL}/brand/tinig-labs-app-icon-512.png`,
   sameAs: [SITE_URL, "https://github.com/tinig-labs"],
 } as const;
 
